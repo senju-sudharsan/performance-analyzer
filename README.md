@@ -192,4 +192,159 @@ The frontend app uses the Google PageSpeed Insights API. Ensure to configure the
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+
+******************************************************************************************************************************************************************
+STEPS FOR MIGRATION : 
+Repo: https://github.com/senju-sudharsan/performance-analyzer
+
+Project has frontend (React) + backend (Node/Express)
+
+No API keys required (UI-driven simulation)
+
+🚀 Performance Analyzer – Setup & Migration Guide
+1️⃣ Prerequisites (Install These First)
+✅ Node.js (Required)
+
+Version: Node 18+ recommended
+
+Download: https://nodejs.org/
+
+Verify installation:
+
+node -v
+npm -v
+
+✅ Git (Required)
+
+Download: https://git-scm.com/
+
+Verify:
+
+git --version
+
+2️⃣ Clone the Repository
+
+Open a terminal / PowerShell and run:
+
+git clone https://github.com/senju-sudharsan/performance-analyzer.git
+cd performance-analyzer
+
+3️⃣ Project Structure (Important)
+
+After cloning, you should see:
+
+performance-analyzer/
+│
+├── frontend/        # React UI
+├── server/          # Node.js backend (mock / realism layer)
+└── README.md
+
+4️⃣ Backend Setup (Node / Express)
+📁 Move into backend folder
+cd server
+
+📦 Install backend dependencies
+npm install
+
+
+⚠️ No .env file needed
+⚠️ No API keys required
+
+▶️ Start backend server
+node server.js
+
+
+You should see:
+
+Backend running at http://localhost:3001
+
+
+✅ Keep this terminal open
+
+5️⃣ Frontend Setup (React)
+📁 Open a NEW terminal window
+
+(do not stop backend)
+
+cd performance-analyzer/frontend
+
+📦 Install frontend dependencies
+npm install
+
+▶️ Start frontend
+npm start
+
+
+Expected output:
+
+Local: http://localhost:3000
+
+
+Your browser should open automatically.
+
+6️⃣ Using the Application
+
+Enter any URL:
+
+https://example.com
+https://youtube.com
+https://amazon.in
+
+
+Click Analyze
+
+The UI will display:
+
+Lighthouse category gauges
+
+Core Web Vitals
+
+Performance Breakdown
+
+Network Waterfall
+
+Dependency Matrix
+
+Opportunities & Diagnostics
+
+
+
+9️⃣ Common Issues & Fixes
+❌ Backend not responding
+
+Fix:
+
+cd server
+node server.js
+
+
+Make sure it’s running on port 3001
+
+❌ npm start fails in root
+
+You must be inside frontend:
+
+cd frontend
+npm start
+
+❌ Scores not changing after code update
+
+Clear browser storage:
+
+localStorage.clear();
+
+🔟 Migration Checklist (TL;DR)
+# Clone
+git clone https://github.com/senju-sudharsan/performance-analyzer.git
+
+# Backend
+cd server
+npm install
+node server.js
+
+# Frontend (new terminal)
+cd frontend
+npm install
+npm start
+
+***************************************************************************************************************************************************************
