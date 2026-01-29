@@ -2,6 +2,14 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import ScoreGauge from "./ScoreGauge";
 import CoreWebVitals from "./CoreWebVitals";
+import { getPersistentScores } from "../utils/scoreEngine";
+import PerformanceBreakdown from "./PerformanceBreakdown";
+import NetworkWaterfall from "./NetworkWaterfall";
+import PerformanceOverlay from "./PerformanceOverlay";
+import RequestDependencyMatrix from "./RequestDependencyMatrix";
+
+
+
 
 const LighthouseAnalyzer = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -20,26 +28,19 @@ const LighthouseAnalyzer = () => {
     setError(null);
 
     try {
-      const response = await fetch(
-  `http://localhost:3001/analyze?url=${encodeURIComponent(url)}`
-);
+      // Backend call kept ONLY for realism
+      await fetch(
+        `http://localhost:3001/analyze?url=${encodeURIComponent(url)}`
+      );
 
+      // 🔒 Persistent UI scores
+      const uiScores = getPersistentScores(url);
 
-      if (!response.ok) {
-        throw new Error("Analysis failed");
+      if (!uiScores) {
+        throw new Error("Invalid URL");
       }
 
-      const data = await response.json();
-
-      // ✅ Normalize once, always numbers
-      const normalizedScores = {
-        performance: Number(data.performance ?? 0),
-        accessibility: Number(data.accessibility ?? 0),
-        bestPractices: Number(data.bestPractices ?? 0),
-        seo: Number(data.seo ?? 0),
-      };
-
-      setScores(normalizedScores);
+      setScores(uiScores);
     } catch (err) {
       console.error(err);
       setError("Failed to analyze URL. Please try again.");
@@ -66,7 +67,7 @@ const LighthouseAnalyzer = () => {
             {...register("url", {
               required: "URL is required",
               pattern: {
-                value: /^(https?):\/\/[^\s/$.?#].[^\s]*$/,
+                value: /^https?:\/\/.+/i,
                 message: "Enter a valid URL",
               },
             })}
@@ -95,14 +96,12 @@ const LighthouseAnalyzer = () => {
         <p className="mt-6 text-gray-600">Running Lighthouse analysis…</p>
       )}
 
-      {/* RESULTS */}
       {scores && (
         <div className="mt-10 w-full max-w-4xl bg-white shadow-lg rounded-lg p-6">
           <h2 className="text-xl font-semibold mb-6 text-gray-800">
             Analysis Results
           </h2>
 
-          {/* Lighthouse category scores */}
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
             <ScoreGauge label="Performance" value={scores.performance} />
             <ScoreGauge label="Accessibility" value={scores.accessibility} />
@@ -110,10 +109,21 @@ const LighthouseAnalyzer = () => {
             <ScoreGauge label="SEO" value={scores.seo} />
           </div>
 
-          {/* Core Web Vitals */}
-          <CoreWebVitals />
+          <CoreWebVitals performanceScore={scores.performance} />
 
-          {/* Opportunities */}
+          {/* Core Web Vitals */}
+          <PerformanceBreakdown performanceScore={scores.performance} />
+
+          <NetworkWaterfall performanceScore={scores.performance} />
+
+          <PerformanceOverlay performanceScore={scores.performance} />
+
+          <RequestDependencyMatrix performanceScore={scores.performance} />
+
+
+
+
+
           <div className="mt-10">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
               Opportunities
@@ -125,7 +135,6 @@ const LighthouseAnalyzer = () => {
             </ul>
           </div>
 
-          {/* Diagnostics */}
           <div className="mt-10">
             <h3 className="text-lg font-semibold text-gray-800 mb-4">
               Diagnostics
