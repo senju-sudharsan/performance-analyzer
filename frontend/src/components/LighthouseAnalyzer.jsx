@@ -21,8 +21,9 @@ const LighthouseAnalyzer = () => {
 
     try {
       const response = await fetch(
-        `http://localhost:4000/analyze?url=${encodeURIComponent(url)}`
-      );
+  `http://localhost:3001/analyze?url=${encodeURIComponent(url)}`
+);
+
 
       if (!response.ok) {
         throw new Error("Analysis failed");
